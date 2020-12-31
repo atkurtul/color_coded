@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 2.8)
 
 project(color_coded)
 
-option(DOWNLOAD_CLANG "Download pre-built clang+llvm" TRUE)
 
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE RELEASE)
@@ -49,21 +48,8 @@ find_package(ZLIB REQUIRED)
 # PThread
 find_package(Threads REQUIRED)
 
-if (NOT DOWNLOAD_CLANG)
-	find_package(LLVM)
-	if(LLVM_FOUND)
-	  find_package(LibClang)
-	else()
-	  message(STATUS "LLVM not found on system")
-	endif()
-endif()
-
-if ((NOT LLVM_FOUND) OR (NOT CLANG_FOUND) OR (${DOWNLOAD_CLANG}))
-	set(DOWNLOAD_CLANG 1)
-	include(cmake/clang/download.cmake)
-	find_package(LLVM REQUIRED)
-	find_package(LibClang REQUIRED)
-endif()
+find_package(LLVM REQUIRED)
+find_package(LibClang REQUIRED)
 
 include_directories(
   include
